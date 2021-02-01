@@ -14,7 +14,7 @@ body {
   font-size: 16px;
   line-height: 1.5;
   color: $default-color;
-  @extend r400;
+  @extend %r400;
 }
 
 .wrapper {
@@ -39,5 +39,5 @@ body {
 .title {
   font-size: 36px;
   line-height: 43px;
-  @extend r500;
+  @extend %r500;
 }
