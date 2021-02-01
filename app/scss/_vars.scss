@@ -1,16 +1,19 @@
 // Variables
-$accent-color: #436372;
-$default-color: #585858;
-$title-color: #243f4d;
-$btn-color: #a3bbc8;
-$bg-color: #fcd7b6;
+$accent-color: #009688;
+$default-color: #404040;
+$bg-color: #efefef;
 
-%dms-regular {
-  font-family: "DMSans-Regular", sans-serif;
+%r400 {
+  font-family: "Roboto", sans-serif;
   font-weight: 400;
 }
 
-%dms-bold {
-  font-family: "DMSans-Bold", sans-serif;
-  font-weight: 700;
+%r300 {
+  font-family: "Roboto", sans-serif;
+  font-weight: 300;
+}
+
+%r500 {
+  font-family: "Roboto", sans-serif;
+  font-weight: 500;
 }
