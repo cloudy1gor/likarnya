@@ -1,0 +1,65 @@
+.about {
+  margin-bottom: 150px;
+  padding-top: 210px;
+
+  &__content {
+    display: flex;
+    margin-bottom: 150px;
+  }
+
+  &__text {
+    margin-right: 30px;
+    max-width: 468px;
+    line-height: 19px;
+
+    p:not(:last-child) {
+      margin-bottom: 25px;
+    }
+  }
+
+  &__links {
+    display: flex;
+  }
+
+  &__medical,
+  &__answers {
+    @include bg();
+    display: block;
+    margin-right: 30px;
+    padding: 180px 50px 60px;
+    min-width: 670px;
+    min-height: 320px;
+    transition: transform 0.5s, box-shadow 0.5s;
+
+    &:hover {
+      box-shadow: 0 10px 50px 5px rgba(0, 0, 0, 0.4);
+      transform: scale(1.03);
+    }
+  }
+
+  &__answers {
+    margin-right: 0;
+    min-width: 470px;
+  }
+
+  &__info {
+    display: block;
+    margin-bottom: 12px;
+    font-size: 36px;
+    line-height: 43px;
+    color: #fff;
+    @extend %r500;
+
+    &--black {
+      color: $default-color;
+    }
+  }
+
+  &__description {
+    color: #fff;
+
+    &--gray {
+      color: #ccc;
+    }
+  }
+}
