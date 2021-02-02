@@ -151,7 +151,8 @@
   &__img {
     position: relative;
     z-index: 1;
-    max-height: 787px;
+    min-height: 787px;
+    max-height: 788px;
     object-fit: cover;
   }
 
@@ -192,10 +193,11 @@
   }
 
   &__content {
-    position: absolute;
+    position: relative;
     left: 50%;
-    bottom: -80px;
+    bottom: 70px;
     z-index: 3;
+    max-width: 1170px;
     box-shadow: 0 10px 50px 5px rgba(0, 0, 0, 0.4);
     background-color: #fff;
     transform: translateX(-50%);
