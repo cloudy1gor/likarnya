@@ -1,0 +1,43 @@
+.branch {
+  margin-bottom: 150px;
+
+  &__container {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    min-width: 100%;
+    max-height: 600px;
+  }
+
+  &__link {
+    @include txt(1);
+    position: relative;
+    display: block;
+    padding: 30px 30px 30px 62px;
+    max-width: 570px;
+    line-height: 19px;
+    color: $default-color;
+    background-color: #fff;
+    transition: background-color 0.5s, box-shadow 0.5s;
+
+    &::before {
+      @include pseudo();
+      left: 30px;
+      top: 50%;
+      bottom: 0;
+      min-width: 2px;
+      max-height: 50px;
+      background-color: $accent-color;
+      transform: translateY(-50%);
+    }
+
+    &:hover {
+      box-shadow: 0 3px 40px 3px rgba(0, 0, 0, 0.2);
+      background-color: #e5f4f3;
+    }
+
+    &:not(:last-child) {
+      margin-bottom: 30px;
+    }
+  }
+}

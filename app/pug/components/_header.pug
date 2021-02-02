@@ -82,9 +82,9 @@ header.header
           svg.menu__pic
             use(xlink:href="images/dest/sprite.svg#covid")
   
-  .swiper-container
-    .swiper-wrapper
-      .swiper-slide
+  .header__container.swiper-container
+    .header__wrapper.swiper-wrapper
+      .header__slide.swiper-slide
         .header__owerlay
         img.header__img(src="images/dest/slides/1.jpg", alt="слайд")
         .header__text
@@ -92,14 +92,16 @@ header.header
             span.header__title На базі нашої лікарні працює 
             span.header__title 4 кафедри ВНМУ
             span.header__subtitle
-      .swiper-slide
+            
+      .header__slide.swiper-slide
         .header__owerlay
         img.header__img(src="images/dest/slides/2.jpg", alt="слайд")
         .header__text
           .container
             span.header__title Допомога надається в режимі 24/7/365
             span.header__subtitle Багатопрофільний лікувальний заклад в якому надається медична допомога за 18 спеціальностями. Стаціонарна та невідкладна допомога надається в режимі 24/7/365
-      .swiper-slide
+
+      .header__slide.swiper-slide
         .header__owerlay
         img.header__img(src="images/dest/slides/3.jpg", alt="слайд")
         .header__text
@@ -107,28 +109,31 @@ header.header
             span.header__title В нашій команді працює 169
             span.header__title висококваліфікованих лікарів
             span.header__subtitle
-      .swiper-slide
+
+      .header__slide.swiper-slide
         .header__owerlay
         img.header__img(src="images/dest/slides/4.jpg", alt="слайд")
         .header__text
           .container
             span.header__title Лікарня є опорною в лікуванніCOVID-19
             span.header__subtitle Наша лікарня є опорною в лікуванні COVID-19. Загальний ліжковий фонд для лікування пацієнтів з COVID-19 - 285
-      .swiper-slide
+
+      .header__slide.swiper-slide
         .header__owerlay
         img.header__img(src="images/dest/slides/5.jpg", alt="слайд")
         .header__text
           .container 
             span.header__title Малоінвазивна хірургія
             span.header__subtitle Мінімальний больовий синдром, швидка реабілітація, косметичний результат
-      .swiper-slide
+
+      .header__slide.swiper-slide
         .header__owerlay
         img.header__img(src="images/dest/slides/6.jpg", alt="слайд")
         .header__text
           .container
             span.header__title Клініко-діагностична лабораторія
             span.header__subtitle Клініко-діагностична лабораторія закладу проводить більше 50-ти клінічних досліджень на сучасному лабораторному обладнанні
-    .swiper-pagination
+    .header__pagination.swiper-pagination
 
   .header__content
     .container

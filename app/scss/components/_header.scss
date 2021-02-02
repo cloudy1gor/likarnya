@@ -197,7 +197,7 @@
     left: 50%;
     bottom: 70px;
     z-index: 3;
-    max-width: 1170px;
+    max-width: 1200px;
     box-shadow: 0 10px 50px 5px rgba(0, 0, 0, 0.4);
     background-color: #fff;
     transform: translateX(-50%);
@@ -217,7 +217,7 @@
     }
 
     &-item {
-      border: 1px solid transparent;
+      border-bottom: 1px solid transparent;
       padding: 10px;
       transition: border-color 0.4s;
     }

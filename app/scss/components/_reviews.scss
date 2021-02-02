@@ -1,0 +1,76 @@
+.reviews {
+  margin-bottom: 150px;
+
+  &__top {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__more {
+    @include txt(1);
+    display: block;
+    padding-top: 20px;
+    max-width: 250px;
+    max-height: 50px;
+    color: $accent-color;
+    transition: color 0.4s;
+
+    &:hover {
+      color: $default-color;
+    }
+  }
+
+  &__slide {
+    border: 2px solid #fff;
+    padding: 32px 30px 44px;
+    max-width: 50%;
+    box-sizing: border-box;
+    background-color: #fff;
+    transition: border-color 0.5s;
+
+    &:hover {
+      border-color: $accent-color;
+    }
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  &__name {
+    margin-right: 20px;
+    @extend %r500;
+  }
+
+  &__date {
+    margin-left: auto;
+    color: #dfdfdf;
+  }
+
+  &__text {
+    @include txt(8);
+    max-width: 510px;
+    line-height: 19px;
+  }
+
+  &__btn {
+    &::after {
+      @include pseudo();
+      left: 0;
+      right: 0;
+      top: 50%;
+      bottom: 0;
+      margin: 0 auto;
+      width: 46px;
+      height: 12px;
+      background-image: url("../images/dest/arrow.svg");
+      transform: translateY(-50%);
+    }
+
+    &--prev {
+      transform: rotate(180deg);
+    }
+  }
+}

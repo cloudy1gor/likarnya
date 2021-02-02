@@ -39,6 +39,7 @@ body {
 }
 
 .title {
+  margin-bottom: 60px;
   font-size: 36px;
   line-height: 43px;
   @extend %r500;
@@ -87,4 +88,32 @@ body {
     background-color: $accent-color;
     opacity: 1;
   }
+}
+
+.swiper-container {
+  min-height: 345px !important;
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+  position: relative;
+  bottom: -50px;
+  z-index: 1;
+  width: 85px;
+  height: 41px;
+  background-color: #fff;
+}
+
+.swiper-button-next {
+  left: 51.5%;
+}
+
+.swiper-button-prev {
+  left: 41.5%;
+  bottom: -70px;
+}
+
+.swiper-button-next.swiper-button-disabled,
+.swiper-button-prev.swiper-button-disabled {
+  opacity: 0.6;
 }
