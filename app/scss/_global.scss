@@ -56,3 +56,33 @@ body {
     max-width: 155px;
   }
 }
+
+.swiper-container-horizontal > .swiper-pagination-bullets,
+.swiper-pagination-custom,
+.swiper-pagination-fraction {
+  left: unset;
+  right: 0;
+  top: 50%;
+  display: block;
+  width: 200px;
+  max-height: 20px;
+}
+
+.swiper-pagination {
+  transform: rotate(90deg);
+}
+
+.swiper-pagination-bullet {
+  width: 20px;
+  height: 20px;
+  background-color: #f8f8f8;
+  opacity: 0.7;
+
+  &-active {
+    border: 2px solid #fff;
+    width: 22px;
+    height: 22px;
+    background-color: $accent-color;
+    opacity: 1;
+  }
+}
