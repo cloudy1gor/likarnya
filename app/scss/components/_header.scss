@@ -1,13 +1,260 @@
 //липкая шапка
-.menu {
-  position: fixed;
-  left: 0;
-  right: 0;
-  top: 0;
-  z-index: 20;
-  transition: all 0.3s ease;
+// .menu {
+//   position: fixed;
+//   left: 0;
+//   right: 0;
+//   top: 0;
+//   z-index: 20;
+//   transition: all 0.3s ease;
 
-  &.out {
-    transform: translateY(-100%);
+//   &.out {
+//     transform: translateY(-100%);
+//   }
+// }
+
+.header {
+  &__top {
+    border-bottom: 1px solid #dfdfdf;
+    padding: 10px 0;
+
+    &-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
+
+  &__address {
+    display: flex;
+  }
+
+  &__location {
+    margin-right: 10px;
+    width: 12px;
+    height: 20px;
+
+    &-text {
+      @include txt(2);
+      display: block;
+      max-width: 350px;
+    }
+  }
+
+  &__nav {
+    &-list {
+      display: flex;
+    }
+
+    &-item {
+      &:not(:last-child) {
+        margin-right: 28px;
+      }
+    }
+
+    &-link {
+      @include txt(1);
+      display: block;
+      max-width: 200px;
+      font-size: 14px;
+      line-height: 17px;
+      color: $default-color;
+      transition: color 0.4s;
+
+      &:hover {
+        color: $accent-color;
+      }
+      @extend %r300;
+    }
+  }
+
+  &__number {
+    &-top {
+      display: flex;
+      margin-bottom: 7px;
+    }
+
+    &-img {
+      margin-right: 15px;
+      width: 25px;
+      height: 21px;
+    }
+
+    &-link {
+      @include txt(2);
+      display: block;
+      max-width: 155px;
+      font-size: 12px;
+      line-height: 14px;
+      color: $accent-color;
+    }
+  }
+
+  &__register {
+    padding: 27px 0;
+
+    &-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    &-btn {
+      display: flex;
+    }
+
+    &-link {
+      display: flex;
+      align-items: center;
+      border-radius: 20px;
+      min-height: 42px;
+      max-width: 250px;
+      background-color: #e6edff;
+
+      &:hover {
+        .header__register-text {
+          color: $default-color;
+        }
+      }
+
+      &--check {
+        background-color: #e5f4f3;
+      }
+    }
+
+    &-logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 15px 0 10px;
+      border-radius: 50%;
+      min-width: 32px;
+      min-height: 32px;
+      background-color: #1050ff;
+
+      &--check {
+        background-color: $accent-color;
+      }
+    }
+
+    &-img {
+      &--facebook {
+        width: 10px;
+        height: 19px;
+      }
+
+      &--check {
+        width: 21px;
+        height: 16px;
+      }
+    }
+
+    &-text {
+      @include txt(2);
+      display: block;
+      margin-right: 20px;
+      max-width: 180px;
+      color: #1050ff;
+      transition: color 0.6s;
+
+      &--check {
+        color: $accent-color;
+      }
+    }
+  }
+
+  &__img {
+    position: relative;
+    z-index: 1;
+    max-height: 787px;
+    object-fit: cover;
+  }
+
+  &__owerlay {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 2;
+    background-color: rgba(0, 0, 0, 0.2);
+  }
+
+  &__text {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+  }
+
+  &__title,
+  &__subtitle {
+    display: inline-block;
+    font-size: 56px;
+    line-height: 67px;
+    color: #fff;
+    @extend %r500;
+  }
+
+  &__subtitle {
+    margin-top: 35px;
+    font-size: 24px;
+    line-height: 29px;
+  }
+
+  &__content {
+    position: absolute;
+    left: 50%;
+    bottom: -80px;
+    z-index: 3;
+    box-shadow: 0 12px 5px 0 rgba(0, 0, 0, 0.4);
+    background-color: #fff;
+    transform: translateX(-50%);
+  }
+
+  &__info {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 20px 0 24px;
+    min-width: 1170px;
+
+    &:hover {
+      .header__info-item {
+        border-color: $accent-color;
+      }
+    }
+
+    &-item {
+      border: 1px solid transparent;
+      padding: 10px;
+      transition: border-color 0.4s;
+    }
+
+    &-top {
+      margin-bottom: 5px;
+    }
+
+    &-number {
+      display: inline-block;
+      margin-right: 20px;
+      font-size: 36px;
+      line-height: 43px;
+      @extend %r500;
+    }
+
+    &-img {
+      max-width: 50px;
+      max-height: 36px;
+    }
+
+    &-text {
+      display: block;
+      line-height: 19px;
+      text-align: center;
+    }
   }
 }

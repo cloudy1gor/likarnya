@@ -41,3 +41,18 @@ body {
   line-height: 43px;
   @extend %r500;
 }
+
+.logo {
+  display: flex;
+
+  &__img {
+    margin-right: 10px;
+    width: 41px;
+    height: 42px;
+  }
+
+  &__text {
+    @include txt(2);
+    max-width: 155px;
+  }
+}

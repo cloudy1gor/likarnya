@@ -1,0 +1,42 @@
+.menu {
+  padding: 15px 0;
+  background-color: $accent-color;
+
+  &__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__img {
+    width: 24px;
+    height: 12px;
+  }
+
+  &__list {
+    display: flex;
+    align-items: center;
+  }
+
+  &__item:not(:last-child) {
+    margin-right: 30px;
+  }
+
+  &__link {
+    @include txt(2);
+    display: block;
+    max-width: 200px;
+    line-height: 19px;
+    color: #fff;
+    transition: color 0.4s;
+
+    &:hover {
+      color: $default-color;
+    }
+  }
+
+  &__pic {
+    width: 102px;
+    height: 21px;
+  }
+}
