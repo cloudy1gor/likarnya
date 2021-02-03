@@ -6,8 +6,6 @@ const browserSync = require("browser-sync").create();
 const concat = require("gulp-concat");
 const babel = require("gulp-babel");
 const plumber = require("gulp-plumber");
-const gulpif = require("gulp-if");
-const yargs = require("yargs").argv;
 const notify = require("gulp-notify");
 const sourcemaps = require("gulp-sourcemaps");
 const uglify = require("gulp-uglify-es").default;
@@ -23,10 +21,15 @@ const recompress = require("imagemin-jpeg-recompress");
 const del = require("del");
 const gcmq = require("gulp-group-css-media-queries");
 const svgmin = require("gulp-svgmin");
+const svgcss = require("gulp-svg-css-pseudo");
 const svgsprite = require("gulp-svg-sprite");
+const embedSvg = require("gulp-embed-svg");
 const ttf2woff2 = require("gulp-ttftowoff2");
 const ttf2woff = require("gulp-ttf2woff");
 const ttf2eot = require("gulp-ttf2eot");
+
+const images = parallel(img, svg2css, svg2sprite);
+const fonts = parallel(woff, woff2, eot);
 
 const jsFiles = [
   "node_modules/swiper/swiper-bundle.js",
@@ -34,17 +37,16 @@ const jsFiles = [
   "app/js/main.js",
 ];
 
-const isProduction = yargs.env === "production" ? true : false;
-
 function browsersync() {
   browserSync.init({
     server: {
-      baseDir: "./app",
+      baseDir: "./dist", // Папка сервера (Исходные файлы)
       index: "index.html",
-    }, // Папка сервера (Исходные файлы)
-    notify: false,
-    online: true,
-    open: false,
+    },
+    open: true,
+    notify: true,
+    logPrefix: "Sempai🔥",
+    logLevel: "info",
   });
 }
 
@@ -55,10 +57,15 @@ function html() {
     )
     .pipe(
       pug({
-        pretty: !isProduction, // Форматирование при сжатии (false)
+        pretty: false, // Форматирование при сжатии
       })
     )
-    .pipe(dest("dist/"))
+    .pipe(
+      embedSvg({
+        selectors: ".include-svg",
+        root: "./app/images/svg/includes",
+      })
+    )
     .pipe(
       size({
         gzip: true,
@@ -67,6 +74,7 @@ function html() {
         showTotal: true,
       })
     )
+    .pipe(dest("dist/"))
     .pipe(browserSync.reload({ stream: true }));
 }
 
@@ -76,7 +84,7 @@ function scripts() {
       plumber({ errorHandler: notify.onError("Error: <%= error.message %>") })
     )
     .pipe(babel({ presets: ["@babel/env"] }))
-    .pipe(gulpif(isProduction, uglify())) // Сжатие JavaScript кода
+    .pipe(uglify()) // Сжатие JavaScript кода
     .pipe(concat("main.min.js"))
     .pipe(dest("dist/js/"))
     .pipe(
@@ -95,7 +103,7 @@ function styles() {
     .pipe(
       plumber({ errorHandler: notify.onError("Error: <%= error.message %>") })
     )
-    .pipe(gulpif(!isProduction, sourcemaps.init()))
+    .pipe(sourcemaps.init())
     .pipe(
       sass({
         outputStyle: "expanded", // "compressed"
@@ -118,20 +126,17 @@ function styles() {
     ) // Добавляет вендорные префиксы
     .pipe(gcmq()) //Группирует медиа
     .pipe(
-      gulpif(
-        isProduction,
-        cleancss({
-          level: {
-            2: {
-              specialComments: 0,
-              // format: "beautify",
-            },
+      cleancss({
+        level: {
+          2: {
+            specialComments: 0,
+            // format: "beautify",
           },
-        })
-      )
+        },
+      })
     )
     .pipe(concat("style.min.css"))
-    .pipe(gulpif(!isProduction, sourcemaps.write()))
+    .pipe(sourcemaps.write("../maps"))
     .pipe(dest("dist/css/"))
     .pipe(
       size({
@@ -144,13 +149,13 @@ function styles() {
     .pipe(browserSync.reload({ stream: true }));
 }
 
-function images() {
+function img() {
   return src([
     "app/images/**/*.+(jpg|jpeg|png|gif|svg|ico)",
-    "!app/images/icons",
+    "!app/images/svg/**/*.svg",
     "!app/images/sprite.svg",
   ])
-    .pipe(changed("dist/images")) // не сжимать изображения повторно
+    .pipe(changed("dist/images")) // не сжимать повторно
     .pipe(
       plumber({ errorHandler: notify.onError("Error: <%= error.message %>") })
     )
@@ -198,8 +203,41 @@ function images() {
     .pipe(browserSync.reload({ stream: true }));
 }
 
+function svg2css() {
+  return src("app/images/svg/css/*.svg")
+    .pipe(
+      svgmin({
+        plugins: [
+          {
+            removeComments: true,
+          },
+          {
+            removeEmptyContainers: true,
+          },
+        ],
+      })
+    )
+    .pipe(
+      svgcss({
+        fileName: "_sprite",
+        fileExt: "scss",
+        cssPrefix: "svg",
+        addSize: false,
+      })
+    )
+    .pipe(dest("./app/scss"))
+    .pipe(
+      size({
+        gzip: true,
+        pretty: true,
+        showFiles: true,
+        showTotal: true,
+      })
+    );
+}
+
 function svg2sprite() {
-  return src("app/images/icons/*.svg")
+  return src("app/images/svg/sprites/*.svg")
     .pipe(changed("dist/images/icons")) // не сжимать изображения повторно
     .pipe(
       plumber({ errorHandler: notify.onError("Error: <%= error.message %>") })
@@ -283,10 +321,6 @@ function eot() {
     .pipe(dest("dist/fonts/"));
 }
 
-function fonts() {
-  return src("app/fonts/*").pipe(dest("dist/fonts"));
-}
-
 function cleanimg() {
   return del("dist/images/**/*", {
     force: true,
@@ -300,9 +334,13 @@ function startwatch() {
 
   watch(["app/js/*.js", "!app/js/*.min.js"], scripts);
 
-  watch("app/images/**/*.+(jpg|jpeg|png|gif|svg|ico)", images);
+  watch("app/images/**/*.+(jpg|jpeg|png|gif|svg|ico)", img);
 
-  watch("app/images/icons/*.svg", svg2sprite);
+  watch("app/svg/sprites/*.svg", svg2sprite);
+
+  watch("app/svg/css/*.svg", svg2css);
+
+  watch("app/svg/includes/*.svg", html);
 }
 
 exports.browsersync = browsersync;
@@ -313,10 +351,6 @@ exports.scripts = scripts;
 
 exports.styles = styles;
 
-exports.images = images;
-
-exports.svg2sprite = svg2sprite;
-
 exports.towoff = woff;
 
 exports.towoff2 = woff2;
@@ -325,17 +359,6 @@ exports.toeot = eot;
 
 exports.cleanimg = cleanimg;
 
-exports.fonts = series(woff, woff2, eot);
-
 exports.default = series(
-  parallel(
-    html,
-    scripts,
-    styles,
-    images,
-    svg2sprite,
-    fonts,
-    browsersync,
-    startwatch
-  )
+  parallel(html, scripts, styles, images, fonts, browsersync, startwatch)
 );

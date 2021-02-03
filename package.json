@@ -29,8 +29,8 @@
     "gulp-clean-css": "^4.3.0",
     "gulp-concat": "^2.6.1",
     "gulp-csso": "^4.0.1",
+    "gulp-embed-svg": "^1.3.0",
     "gulp-group-css-media-queries": "^1.2.2",
-    "gulp-if": "^3.0.0",
     "gulp-imagemin": "^7.1.0",
     "gulp-newer": "^1.4.0",
     "gulp-notify": "^3.2.0",
@@ -39,6 +39,7 @@
     "gulp-sass": "^4.1.0",
     "gulp-size": "^3.0.0",
     "gulp-sourcemaps": "^3.0.0",
+    "gulp-svg-css-pseudo": "^1.0.4",
     "gulp-svg-sprite": "^1.5.0",
     "gulp-svgmin": "^3.0.0",
     "gulp-ttf2eot": "^1.1.2",
@@ -51,8 +52,7 @@
     "stylelint": "^13.7.2",
     "stylelint-declaration-block-no-ignored-properties": "^2.3.0",
     "stylelint-order": "^4.1.0",
-    "stylelint-scss": "^3.18.0",
-    "yargs": "^16.2.0"
+    "stylelint-scss": "^3.18.0"
   },
   "dependencies": {
     "normalize.css": "^8.0.1",
