@@ -20,14 +20,14 @@ html(lang="ua")
                 p Лікарня є базою шести кафедр Вінницького НМУ ім. М.І. Пирогова; кафедри пропедевтики внутрішньої медицини, кафедри загальної хірургії, кафедри інфекційних хвороб, кафедри внутрішньої медицини № 3, кафедри нервових хвороб, кафедри внутрішніх хвороб №2. Співробітники кафедр систематично проводять консультації та курацію хворих у всіх підрозділах лікарні. Лікарня є унікальною базою для лікавання та надання допомоги хворим.
 
               .about__picture
-                img.about__img(src="images/dest/about/about.jpg", alt="Лікарня")
+                img.about__img(src="images/about/about.jpg", alt="Лікарня")
 
             .about__links
-              a.about__medical(style="background-image: url('images/dest/about/about1.jpg')" href="#")
+              a.about__medical(style="background-image: url('images/about/about1.jpg')" href="#")
                 span.about__info.about__info--black Поліклініка
                 span.about__description.about__description--gray Медична допомога за 18 спеціальностями
 
-              a.about__answers(style="background-image: url('images/dest/about/about2.jpg')" href="#")
+              a.about__answers(style="background-image: url('images/about/about2.jpg')" href="#")
                 span.about__info Залишити відгук
                 span.about__description Про нашу роботу
 
@@ -127,6 +127,92 @@ html(lang="ua")
 
               .reviews__btn.reviews__btn--prev.swiper-button-prev
               .reviews__btn.reviews__btn--next.swiper-button-next
+        
+        section.news
+          .container
+            .news__top
+              h2.title.news__title Новини
+              a.news__more(href="#") Переглянути всі новини
+            .news__inner
+              article.post
+                a.post__link(href="#")
+                .post__img-container
+                  img.post__img(src="images/posts/p1.jpg", alt="Пост")
+
+                h3.post__title Чому потреба носити медичну маску викликає у нас дискомфорт і як з цим впоратися?
+
+                p.post__text Пандемія коронавируса змусила мільйони людей по всьому світу почати носити захисні маски.  Кому-то це додало відчуття спокою і захищеності від зараження вірусом, у інших же носіння маски викликає
+              
+                time.post__date 12.12.2020
+
+              article.post
+                a.post__link(href="#")
+                .post__img-container
+                  img.post__img(src="images/posts/p2.jpg", alt="Пост")
+
+                h3.post__title Чому потреба носити медичну маску викликає у нас дискомфорт і як з цим впоратися?
+
+                p.post__text Пандемія коронавируса змусила мільйони людей по всьому світу почати носити захисні маски.  Кому-то це додало відчуття спокою і захищеності від зараження вірусом, у інших же носіння маски викликає
+              
+                time.post__date 12.12.2020
+
+              article.post
+                a.post__link(href="#")
+                .post__img-container
+                  img.post__img(src="images/posts/p3.jpg", alt="Пост")
+
+                h3.post__title Чому потреба носити медичну маску викликає у нас дискомфорт і як з цим впоратися?
+
+                p.post__text Пандемія коронавируса змусила мільйони людей по всьому світу почати носити захисні маски.  Кому-то це додало відчуття спокою і захищеності від зараження вірусом, у інших же носіння маски викликає
+              
+                time.post__date 12.12.2020
+
+              article.post
+                a.post__link(href="#")
+                .post__img-container
+                  img.post__img(src="images/posts/p4.jpg", alt="Пост")
+
+                h3.post__title Чому потреба носити медичну маску викликає у нас дискомфорт і як з цим впоратися?
+
+                p.post__text Пандемія коронавируса змусила мільйони людей по всьому світу почати носити захисні маски.  Кому-то це додало відчуття спокою і захищеності від зараження вірусом, у інших же носіння маски викликає
+              
+                time.post__date 12.12.2020
+
+              article.post
+                a.post__link(href="#")
+                .post__img-container
+                  img.post__img(src="images/posts/p5.jpg", alt="Пост")
+
+                h3.post__title Чому потреба носити медичну маску викликає у нас дискомфорт і як з цим впоратися?
+
+                p.post__text Пандемія коронавируса змусила мільйони людей по всьому світу почати носити захисні маски.  Кому-то це додало відчуття спокою і захищеності від зараження вірусом, у інших же носіння маски викликає
+              
+                time.post__date 12.12.2020
+        
+        section.links 
+          .container 
+            h2.title Корисні посилання
+            ul.links__list
+              li.links__item
+                img.links__img(src="images/partners/moz.svg", alt="")
+                span.links__name Міністерство охорони здоров'я України
+                a.links__more moz.gov.ua
+              li.links__item
+
+                img.links__img(src="images/partners/vmr.png", alt="")
+                span.links__name Вінницька міська рада
+                a.links__more vmr.gov.ua
+              li.links__item
+
+                img.links__img(src="images/partners/nszu.svg", alt="")
+                span.links__name Національна служба здоров'я України
+                a.links__more nszu.gov.ua
+              li.links__item
+
+                img.links__img(src="images/partners/vmr-2.svg ", alt="")
+                span.links__name Департамент охорони здоров'я міської ради
+                a.links__more vmr.gov.ua
+
   
 
       include ../components/_footer.pug

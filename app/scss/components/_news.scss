@@ -1,0 +1,29 @@
+.news {
+  margin-bottom: 150px;
+
+  &__top {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__more {
+    @include txt(1);
+    display: block;
+    padding-top: 20px;
+    max-width: 250px;
+    max-height: 50px;
+    color: $accent-color;
+    transition: color 0.4s;
+
+    &:hover {
+      color: $default-color;
+    }
+  }
+
+  &__inner {
+    display: grid;
+    grid-gap: 30px;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+  }
+}

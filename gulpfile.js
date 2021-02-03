@@ -3,10 +3,11 @@ const { src, dest, parallel, series, watch } = require("gulp");
 
 const pug = require("gulp-pug");
 const browserSync = require("browser-sync").create();
-const bssi = require("browsersync-ssi"); //dont work
 const concat = require("gulp-concat");
 const babel = require("gulp-babel");
 const plumber = require("gulp-plumber");
+const gulpif = require("gulp-if");
+const yargs = require("yargs").argv;
 const notify = require("gulp-notify");
 const sourcemaps = require("gulp-sourcemaps");
 const uglify = require("gulp-uglify-es").default;
@@ -15,9 +16,10 @@ const autoprefixer = require("gulp-autoprefixer");
 const cleancss = require("gulp-clean-css");
 const size = require("gulp-size");
 const imagemin = require("gulp-imagemin");
+const mozjpeg = require("imagemin-mozjpeg");
+const pngquant = require("imagemin-pngquant");
 const newer = require("gulp-newer");
 const recompress = require("imagemin-jpeg-recompress");
-const pngquant = require("imagemin-pngquant");
 const del = require("del");
 const gcmq = require("gulp-group-css-media-queries");
 const svgmin = require("gulp-svgmin");
@@ -32,40 +34,43 @@ const jsFiles = [
   "app/js/main.js",
 ];
 
+const isProduction = yargs.env === "production" ? true : false;
+
 function browsersync() {
   browserSync.init({
     server: {
       baseDir: "./app",
       index: "index.html",
-      middleware: bssi({ baseDir: "app/", ext: ".html" }),
     }, // Папка сервера (Исходные файлы)
     notify: false,
     online: true,
     open: false,
-    // tunnel: "cloudy1gor", // URL https://cloudy1gor.loca.lt
   });
 }
 
 function html() {
-  return src("app/pug/pages/*.pug")
-    .pipe(
-      plumber({ errorHandler: notify.onError("Error: <%= error.message %>") })
-    )
-    .pipe(
-      pug({
-        pretty: true,
-      })
-    )
-    .pipe(
-      size({
-        gzip: true,
-        pretty: true,
-        showFiles: true,
-        showTotal: true,
-      })
-    )
-    .pipe(dest("app/"))
-    .pipe(browserSync.stream());
+  return (
+    src("app/pug/pages/*.pug")
+      // .pipe(cache("html"))
+      .pipe(
+        plumber({ errorHandler: notify.onError("Error: <%= error.message %>") })
+      )
+      .pipe(
+        pug({
+          pretty: !isProduction, // Форматирование файлов при сжатии (false)
+        })
+      )
+      .pipe(
+        size({
+          gzip: true,
+          pretty: true,
+          showFiles: true,
+          showTotal: true,
+        })
+      )
+      .pipe(dest("app/"))
+      .pipe(browserSync.stream())
+  );
 }
 
 function scripts() {
@@ -74,8 +79,8 @@ function scripts() {
       plumber({ errorHandler: notify.onError("Error: <%= error.message %>") })
     )
     .pipe(babel({ presets: ["@babel/env"] }))
+    .pipe(gulpif(isProduction, uglify())) // Сжатие JavaScript кода
     .pipe(concat("main.min.js"))
-    .pipe(uglify()) // Сжатие JavaScript кода
     .pipe(
       size({
         gzip: true,
@@ -93,11 +98,11 @@ function styles() {
     .pipe(
       plumber({ errorHandler: notify.onError("Error: <%= error.message %>") })
     )
-    .pipe(sourcemaps.init())
+    .pipe(gulpif(!isProduction, sourcemaps.init()))
     .pipe(
       sass({
         outputStyle: "expanded", // "compressed"
-      }).on("error", sass.logError)
+      })
     )
     .pipe(
       autoprefixer({
@@ -116,14 +121,18 @@ function styles() {
     ) // Добавляет вендорные префиксы
     .pipe(gcmq()) //Группирует медиа
     .pipe(
-      cleancss({
-        level: {
-          2: {
-            specialComments: 0,
+      gulpif(
+        isProduction,
+        cleancss({
+          level: {
+            2: {
+              specialComments: 0,
+              // format: "beautify",
+            },
           },
-        },
-      })
-    ) // format: "beautify",
+        })
+      )
+    )
     .pipe(concat("style.min.css"))
     .pipe(
       size({
@@ -133,17 +142,20 @@ function styles() {
         showTotal: true,
       })
     )
-    .pipe(sourcemaps.write())
+    .pipe(gulpif(!isProduction, sourcemaps.write()))
     .pipe(dest("app/css/"))
     .pipe(browserSync.stream());
 }
 
 function images() {
-  return src("app/images/src/**/*")
+  return src([
+    "app/images/**/*.+(jpg|jpeg|png|gif|svg|ico)",
+    "!app/images/icons",
+    "!app/images/sprite.svg",
+  ])
     .pipe(
       plumber({ errorHandler: notify.onError("Error: <%= error.message %>") })
     )
-    .pipe(newer("app/images/dest")) // не сжимать изображение повторно
     .pipe(
       imagemin(
         {
@@ -159,18 +171,24 @@ function images() {
             quality: "high",
             use: [
               pngquant({
-                quality: [0.7, 0.9],
+                quality: [0.65, 0.8],
                 strip: true,
                 speed: 1,
+                floyd: 0,
               }),
             ],
           }),
           imagemin.gifsicle(),
           imagemin.optipng(),
+          mozjpeg({
+            quality: 85,
+            progressive: true,
+          }),
           imagemin.svgo(),
         ]
       )
     )
+    .pipe(newer("app/images")) // не сжимать изображения повторно
     .pipe(
       size({
         gzip: true,
@@ -179,11 +197,12 @@ function images() {
         showTotal: true,
       })
     )
-    .pipe(dest("app/images/dest"));
+    .pipe(dest("app/images"))
+    .pipe(browserSync.stream());
 }
 
 function svg2sprite() {
-  return src("app/images/src/icons/*.svg")
+  return src("app/images/icons/*.svg")
     .pipe(
       plumber({ errorHandler: notify.onError("Error: <%= error.message %>") })
     )
@@ -205,6 +224,7 @@ function svg2sprite() {
           stack: {
             sprite: "../sprite.svg",
           },
+          symbol: true,
         },
       })
     )
@@ -216,10 +236,11 @@ function svg2sprite() {
         showTotal: true,
       })
     )
-    .pipe(dest("app/images/src"));
+    .pipe(dest("app/images"))
+    .pipe(browserSync.stream());
 }
 
-function towoff() {
+function woff() {
   return src("app/fonts/*.ttf")
     .pipe(
       plumber({ errorHandler: notify.onError("Error: <%= error.message %>") })
@@ -228,7 +249,7 @@ function towoff() {
     .pipe(dest("app/fonts/"));
 }
 
-function towoff2() {
+function woff2() {
   return src("app/fonts/*.ttf")
     .pipe(
       plumber({ errorHandler: notify.onError("Error: <%= error.message %>") })
@@ -237,19 +258,13 @@ function towoff2() {
     .pipe(dest("app/fonts/"));
 }
 
-function toeot() {
+function eot() {
   return src("app/fonts/*.ttf")
     .pipe(
       plumber({ errorHandler: notify.onError("Error: <%= error.message %>") })
     )
     .pipe(ttf2eot())
     .pipe(dest("app/fonts/"));
-}
-
-function cleanimg() {
-  return del("app/images/dest/**/*", {
-    force: true,
-  }); // Удаляем всё содержимое папки "app/images/#dest/"
 }
 
 function cleandist() {
@@ -264,7 +279,7 @@ function buildcopy() {
       "app/*.html",
       "app/css/**/*.min.css",
       "app/js/**/main.min.js",
-      "app/images/dest/**/*",
+      "app/images/**/*",
       "app/fonts/*",
     ],
     {
@@ -281,9 +296,9 @@ function startwatch() {
 
   watch(["app/js/*.js", "!app/js/*.min.js"], scripts);
 
-  watch("app/images/src/**/*", images);
+  watch("app/images/**/*.+(jpg|jpeg|png|gif|svg|ico)", images);
 
-  watch("app/images/src/icons/*.svg", svg2sprite);
+  watch("app/images/icons/*.svg", svg2sprite);
 }
 
 exports.browsersync = browsersync;
@@ -298,15 +313,13 @@ exports.images = images;
 
 exports.svg2sprite = svg2sprite;
 
-exports.towoff = towoff;
+exports.towoff = woff;
 
-exports.towoff2 = towoff2;
+exports.towoff2 = woff2;
 
-exports.toeot = toeot;
+exports.toeot = eot;
 
 exports.cleandist = cleandist;
-
-exports.cleanimg = cleanimg;
 
 exports.build = series(cleandist, styles, scripts, images, buildcopy);
 

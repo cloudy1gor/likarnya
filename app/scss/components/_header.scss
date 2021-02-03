@@ -10,22 +10,6 @@
     }
   }
 
-  &__address {
-    display: flex;
-  }
-
-  &__location {
-    margin-right: 10px;
-    width: 12px;
-    height: 20px;
-
-    &-text {
-      @include txt(2);
-      display: block;
-      max-width: 350px;
-    }
-  }
-
   &__nav {
     &-list {
       display: flex;
@@ -50,28 +34,6 @@
         color: $accent-color;
       }
       @extend %r300;
-    }
-  }
-
-  &__number {
-    &-top {
-      display: flex;
-      margin-bottom: 7px;
-    }
-
-    &-img {
-      margin-right: 15px;
-      width: 25px;
-      height: 21px;
-    }
-
-    &-link {
-      @include txt(2);
-      display: block;
-      max-width: 155px;
-      font-size: 12px;
-      line-height: 14px;
-      color: $accent-color;
     }
   }
 
@@ -162,8 +124,8 @@
     right: 0;
     top: 0;
     bottom: 0;
-    z-index: 2;
-    background-color: rgba(0, 0, 0, 0.2);
+    z-index: 3;
+    background-color: rgba(0, 0, 0, 0.3);
   }
 
   &__text {

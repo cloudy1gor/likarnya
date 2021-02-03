@@ -1,0 +1,64 @@
+.links {
+  margin-bottom: 150px;
+
+  &__list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    border: 2px solid transparent;
+    padding: 30px 50px;
+    min-height: 270px;
+    max-width: calc(25% - 30px);
+    background-color: #fff;
+    transition: transform 0.6s, border-color 0.4s;
+
+    &:hover {
+      border-color: $accent-color;
+      transform: translateY(-15px);
+    }
+  }
+
+  &__img {
+    margin-bottom: 33px;
+    max-height: 91px;
+    object-fit: contain;
+  }
+
+  &__name {
+    @include txt(2);
+    display: block;
+    flex: 1 1;
+    margin-bottom: 27px;
+    min-height: 100%;
+    font-size: 14px;
+    line-height: 19px;
+    text-align: center;
+  }
+
+  &__more {
+    position: relative;
+    display: block;
+    margin: 0 auto;
+    min-width: 110px;
+    text-align: end;
+    color: #1050ff;
+    cursor: pointer;
+
+    &::before {
+      @include bg();
+      @include pseudo();
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 19px;
+      height: 19px;
+      background-image: url("../images/link.svg");
+    }
+  }
+}

@@ -1,5 +1,7 @@
 .reviews {
+  @include bg($size: contain);
   margin-bottom: 150px;
+  background-image: url("../images/decor-3.png");
 
   &__top {
     display: flex;
@@ -65,7 +67,7 @@
       margin: 0 auto;
       width: 46px;
       height: 12px;
-      background-image: url("../images/dest/arrow.svg");
+      background-image: url("../images/arrow.svg");
       transform: translateY(-50%);
     }
 
