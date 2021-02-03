@@ -9,6 +9,4 @@ npm-debug.*
 *.psd
 *.png
 package-lock.json
-dist/
-app/css/*
 
