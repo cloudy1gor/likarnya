@@ -18,7 +18,7 @@ const size = require("gulp-size");
 const imagemin = require("gulp-imagemin");
 const mozjpeg = require("imagemin-mozjpeg");
 const pngquant = require("imagemin-pngquant");
-const newer = require("gulp-newer");
+const changed = require("gulp-changed");
 const recompress = require("imagemin-jpeg-recompress");
 const del = require("del");
 const gcmq = require("gulp-group-css-media-queries");
@@ -49,28 +49,25 @@ function browsersync() {
 }
 
 function html() {
-  return (
-    src("app/pug/pages/*.pug")
-      // .pipe(cache("html"))
-      .pipe(
-        plumber({ errorHandler: notify.onError("Error: <%= error.message %>") })
-      )
-      .pipe(
-        pug({
-          pretty: !isProduction, // Форматирование файлов при сжатии (false)
-        })
-      )
-      .pipe(
-        size({
-          gzip: true,
-          pretty: true,
-          showFiles: true,
-          showTotal: true,
-        })
-      )
-      .pipe(dest("app/"))
-      .pipe(browserSync.stream())
-  );
+  return src("app/pug/pages/*.pug")
+    .pipe(
+      plumber({ errorHandler: notify.onError("Error: <%= error.message %>") })
+    )
+    .pipe(
+      pug({
+        pretty: !isProduction, // Форматирование при сжатии (false)
+      })
+    )
+    .pipe(dest("dist/"))
+    .pipe(
+      size({
+        gzip: true,
+        pretty: true,
+        showFiles: true,
+        showTotal: true,
+      })
+    )
+    .pipe(browserSync.reload({ stream: true }));
 }
 
 function scripts() {
@@ -81,6 +78,7 @@ function scripts() {
     .pipe(babel({ presets: ["@babel/env"] }))
     .pipe(gulpif(isProduction, uglify())) // Сжатие JavaScript кода
     .pipe(concat("main.min.js"))
+    .pipe(dest("dist/js/"))
     .pipe(
       size({
         gzip: true,
@@ -89,8 +87,7 @@ function scripts() {
         showTotal: true,
       })
     )
-    .pipe(dest("app/js/"))
-    .pipe(browserSync.stream());
+    .pipe(browserSync.reload({ stream: true }));
 }
 
 function styles() {
@@ -134,6 +131,8 @@ function styles() {
       )
     )
     .pipe(concat("style.min.css"))
+    .pipe(gulpif(!isProduction, sourcemaps.write()))
+    .pipe(dest("dist/css/"))
     .pipe(
       size({
         gzip: true,
@@ -142,9 +141,7 @@ function styles() {
         showTotal: true,
       })
     )
-    .pipe(gulpif(!isProduction, sourcemaps.write()))
-    .pipe(dest("app/css/"))
-    .pipe(browserSync.stream());
+    .pipe(browserSync.reload({ stream: true }));
 }
 
 function images() {
@@ -153,6 +150,7 @@ function images() {
     "!app/images/icons",
     "!app/images/sprite.svg",
   ])
+    .pipe(changed("dist/images")) // не сжимать изображения повторно
     .pipe(
       plumber({ errorHandler: notify.onError("Error: <%= error.message %>") })
     )
@@ -188,7 +186,7 @@ function images() {
         ]
       )
     )
-    .pipe(newer("app/images")) // не сжимать изображения повторно
+    .pipe(dest("dist/images"))
     .pipe(
       size({
         gzip: true,
@@ -197,12 +195,12 @@ function images() {
         showTotal: true,
       })
     )
-    .pipe(dest("app/images"))
-    .pipe(browserSync.stream());
+    .pipe(browserSync.reload({ stream: true }));
 }
 
 function svg2sprite() {
   return src("app/images/icons/*.svg")
+    .pipe(changed("dist/images/icons")) // не сжимать изображения повторно
     .pipe(
       plumber({ errorHandler: notify.onError("Error: <%= error.message %>") })
     )
@@ -224,10 +222,11 @@ function svg2sprite() {
           stack: {
             sprite: "../sprite.svg",
           },
-          symbol: true,
+          symbol: false,
         },
       })
     )
+    .pipe(dest("dist/images"))
     .pipe(
       size({
         gzip: true,
@@ -236,57 +235,62 @@ function svg2sprite() {
         showTotal: true,
       })
     )
-    .pipe(dest("app/images"))
-    .pipe(browserSync.stream());
+    .pipe(browserSync.reload({ stream: true }));
 }
 
 function woff() {
   return src("app/fonts/*.ttf")
     .pipe(
+      changed("dist/fonts", {
+        extension: ".woff",
+        hasChanged: changed.compareLastModifiedTime,
+      })
+    )
+    .pipe(
       plumber({ errorHandler: notify.onError("Error: <%= error.message %>") })
     )
     .pipe(ttf2woff())
-    .pipe(dest("app/fonts/"));
+    .pipe(dest("dist/fonts/"));
 }
 
 function woff2() {
   return src("app/fonts/*.ttf")
     .pipe(
+      changed("dist/fonts", {
+        extension: ".woff2",
+        hasChanged: changed.compareLastModifiedTime,
+      })
+    )
+    .pipe(
       plumber({ errorHandler: notify.onError("Error: <%= error.message %>") })
     )
     .pipe(ttf2woff2())
-    .pipe(dest("app/fonts/"));
+    .pipe(dest("dist/fonts/"));
 }
 
 function eot() {
   return src("app/fonts/*.ttf")
     .pipe(
+      changed("dist/fonts", {
+        extension: ".eot",
+        hasChanged: changed.compareLastModifiedTime,
+      })
+    )
+    .pipe(
       plumber({ errorHandler: notify.onError("Error: <%= error.message %>") })
     )
     .pipe(ttf2eot())
-    .pipe(dest("app/fonts/"));
+    .pipe(dest("dist/fonts/"));
 }
 
-function cleandist() {
-  return del("dist/**/*", {
+function fonts() {
+  return src("app/fonts/*").pipe(dest("dist/fonts"));
+}
+
+function cleanimg() {
+  return del("dist/images/**/*", {
     force: true,
-  }); // Удаляем всё содержимое папки "dist"
-}
-
-function buildcopy() {
-  return src(
-    [
-      "app/*.html",
-      "app/css/**/*.min.css",
-      "app/js/**/main.min.js",
-      "app/images/**/*",
-      "app/fonts/*",
-    ],
-    {
-      base: "app",
-    }
-  ) // Сохраняем структуру app при копировании
-    .pipe(dest("dist")); // Выгружаем финальную сборку в папку dist
+  }); // Удаляем содержимое папки "dist/images"
 }
 
 function startwatch() {
@@ -319,15 +323,19 @@ exports.towoff2 = woff2;
 
 exports.toeot = eot;
 
-exports.cleandist = cleandist;
+exports.cleanimg = cleanimg;
 
-exports.build = series(cleandist, styles, scripts, images, buildcopy);
+exports.fonts = series(woff, woff2, eot);
 
-exports.default = parallel(
-  html,
-  svg2sprite,
-  styles,
-  scripts,
-  browsersync,
-  startwatch
+exports.default = series(
+  parallel(
+    html,
+    scripts,
+    styles,
+    images,
+    svg2sprite,
+    fonts,
+    browsersync,
+    startwatch
+  )
 );
