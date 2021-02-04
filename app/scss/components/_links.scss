@@ -42,23 +42,11 @@
   }
 
   &__more {
-    position: relative;
     display: block;
     margin: 0 auto;
     min-width: 110px;
     text-align: end;
     color: #1050ff;
     cursor: pointer;
-
-    &::before {
-      @include bg();
-      @include pseudo();
-      left: 0;
-      top: 0;
-      bottom: 0;
-      width: 19px;
-      height: 19px;
-      background-image: url("../images/link.svg");
-    }
   }
 }

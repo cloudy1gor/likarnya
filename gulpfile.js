@@ -12,6 +12,7 @@ const notify = require("gulp-notify");
 const sourcemaps = require("gulp-sourcemaps");
 const uglify = require("gulp-uglify-es").default;
 const sass = require("gulp-sass");
+const fibers = require("fibers");
 const autoprefixer = require("gulp-autoprefixer");
 const cleancss = require("gulp-clean-css");
 const size = require("gulp-size");
@@ -25,20 +26,16 @@ const gcmq = require("gulp-group-css-media-queries");
 const svgmin = require("gulp-svgmin");
 const svgcss = require("gulp-svg-css-pseudo");
 const svgsprite = require("gulp-svg-sprite");
-const embedSvg = require("gulp-embed-svg");
 const ttf2woff2 = require("gulp-ttftowoff2");
 const ttf2woff = require("gulp-ttf2woff");
 const ttf2eot = require("gulp-ttf2eot");
 
+// кастом
 const isProduction = yargs.env === "production" ? true : false;
 const images = parallel(img, svg2css, svg2sprite);
 const fonts = parallel(woff, woff2, eot);
 
-const jsFiles = [
-  "node_modules/swiper/swiper-bundle.js",
-  "!app/js/main.min.js",
-  "app/js/main.js",
-];
+const jsFiles = ["node_modules/swiper/swiper-bundle.js", "app/js/main.js"];
 
 function browsersync() {
   browserSync.init({
@@ -46,7 +43,7 @@ function browsersync() {
       baseDir: "./dist", // Папка сервера (Исходные файлы)
       index: "index.html",
     },
-    open: true,
+    open: false,
     notify: true,
     logPrefix: "Sempai🔥",
     logLevel: "info",
@@ -60,13 +57,7 @@ function html() {
     )
     .pipe(
       pug({
-        pretty: false, // Форматирование при сжатии
-      })
-    )
-    .pipe(
-      embedSvg({
-        selectors: ".include-svg",
-        root: "./app/images/svg/includes",
+        pretty: !isProduction, // Форматирование при сжатии(false)
       })
     )
     .pipe(
@@ -105,66 +96,59 @@ function scripts() {
 }
 
 function styles() {
-  return (
-    src("app/scss/style.scss")
-      .pipe(
-        plumber({ errorHandler: notify.onError("Error: <%= error.message %>") })
-      )
-      .pipe(gulpif(!isProduction, sourcemaps.init()))
-      // .pipe(sourcemaps.init())
-      .pipe(
-        sass({
-          outputStyle: "expanded", // "compressed"
+  return src("app/scss/*.scss")
+    .pipe(
+      plumber({ errorHandler: notify.onError("Error: <%= error.message %>") })
+    )
+    .pipe(gulpif(!isProduction, sourcemaps.init()))
+    .pipe(sass({ outputStyle: "expanded" }, { fibers: fibers }))
+    .pipe(
+      autoprefixer({
+        overrideBrowserslist: ["last 8 versions"],
+        cascade: true,
+        browsers: [
+          "Android >= 4",
+          "Chrome >= 20",
+          "Firefox >= 24",
+          "Explorer >= 11",
+          "iOS >= 6",
+          "Opera >= 12",
+          "Safari >= 6",
+        ],
+      })
+    ) // Добавляет вендорные префиксы
+    .pipe(gcmq()) //Группирует медиа
+    .pipe(
+      gulpif(
+        !isProduction,
+        cleancss({
+          level: {
+            2: {
+              specialComments: 0,
+              // format: "beautify",
+            },
+          },
         })
       )
-      .pipe(
-        autoprefixer({
-          overrideBrowserslist: ["last 8 versions"],
-          cascade: true,
-          browsers: [
-            "Android >= 4",
-            "Chrome >= 20",
-            "Firefox >= 24",
-            "Explorer >= 11",
-            "iOS >= 6",
-            "Opera >= 12",
-            "Safari >= 6",
-          ],
-        })
-      ) // Добавляет вендорные префиксы
-      .pipe(gcmq()) //Группирует медиа
-      .pipe(gulpif(!isProduction, cleancss()))
-      // .pipe(
-      //   cleancss({
-      //     level: {
-      //       2: {
-      //         specialComments: 0,
-      //         // format: "beautify",
-      //       },
-      //     },
-      //   })
-      // )
-      .pipe(concat("style.min.css"))
-      .pipe(gulpif(!isProduction, sourcemaps.write("../maps")))
-      // .pipe(sourcemaps.write("../maps"))
-      .pipe(dest("dist/css/"))
-      .pipe(
-        size({
-          gzip: true,
-          pretty: true,
-          showFiles: true,
-          showTotal: true,
-        })
-      )
-      .pipe(browserSync.reload({ stream: true }))
-  );
+    )
+    .pipe(concat("style.min.css"))
+    .pipe(gulpif(!isProduction, sourcemaps.write(".")))
+    .pipe(dest("dist/css/"))
+    .pipe(
+      size({
+        gzip: true,
+        pretty: true,
+        showFiles: true,
+        showTotal: true,
+      })
+    )
+    .pipe(browserSync.reload({ stream: true }));
 }
 
 function img() {
   return src([
     "app/images/**/*.+(jpg|jpeg|png|gif|svg|ico)",
-    "!app/images/svg/**/*.svg",
-    "!app/images/sprite.svg",
+    // "!app/images/svg/**/*.svg",
   ])
     .pipe(changed("dist/images")) // не сжимать повторно
     .pipe(
@@ -248,8 +232,8 @@ function svg2css() {
 }
 
 function svg2sprite() {
-  return src("app/images/svg/sprites/*.svg")
-    .pipe(changed("dist/images/icons")) // не сжимать изображения повторно
+  return src("app/images/svg/icons/*.svg")
+    .pipe(changed("dist/images")) // не сжимать изображения повторно
     .pipe(
       plumber({ errorHandler: notify.onError("Error: <%= error.message %>") })
     )
@@ -335,7 +319,7 @@ function eot() {
 function cleanimg() {
   return del("dist/images/**/*", {
     force: true,
-  }); // Удаляем содержимое папки "dist/images"
+  }); // Удаление папки "dist/images"
 }
 
 function startwatch() {
@@ -347,11 +331,9 @@ function startwatch() {
 
   watch("app/images/**/*.+(jpg|jpeg|png|gif|svg|ico)", img);
 
-  watch("app/svg/sprites/*.svg", svg2sprite);
+  watch("app/images/svg/icons/*.svg", svg2sprite);
 
-  watch("app/svg/css/*.svg", svg2css);
-
-  watch("app/svg/includes/*.svg", html);
+  watch("app/images/svg/css/*.svg", svg2css);
 }
 
 exports.browsersync = browsersync;
@@ -361,12 +343,6 @@ exports.html = html;
 exports.scripts = scripts;
 
 exports.styles = styles;
-
-exports.towoff = woff;
-
-exports.towoff2 = woff2;
-
-exports.toeot = eot;
 
 exports.cleanimg = cleanimg;
 
