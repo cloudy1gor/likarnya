@@ -1,6 +1,8 @@
 // Определение констант Gulp
 const { src, dest, parallel, series, watch } = require("gulp");
 
+const yargs = require("yargs").argv;
+const gulpif = require("gulp-if");
 const pug = require("gulp-pug");
 const browserSync = require("browser-sync").create();
 const concat = require("gulp-concat");
@@ -28,6 +30,7 @@ const ttf2woff2 = require("gulp-ttftowoff2");
 const ttf2woff = require("gulp-ttf2woff");
 const ttf2eot = require("gulp-ttf2eot");
 
+const isProduction = yargs.env === "production" ? true : false;
 const images = parallel(img, svg2css, svg2sprite);
 const fonts = parallel(woff, woff2, eot);
 
@@ -79,74 +82,82 @@ function html() {
 }
 
 function scripts() {
-  return src(jsFiles)
-    .pipe(
-      plumber({ errorHandler: notify.onError("Error: <%= error.message %>") })
-    )
-    .pipe(babel({ presets: ["@babel/env"] }))
-    .pipe(uglify()) // Сжатие JavaScript кода
-    .pipe(concat("main.min.js"))
-    .pipe(dest("dist/js/"))
-    .pipe(
-      size({
-        gzip: true,
-        pretty: true,
-        showFiles: true,
-        showTotal: true,
-      })
-    )
-    .pipe(browserSync.reload({ stream: true }));
+  return (
+    src(jsFiles)
+      .pipe(
+        plumber({ errorHandler: notify.onError("Error: <%= error.message %>") })
+      )
+      .pipe(babel({ presets: ["@babel/env"] }))
+      .pipe(gulpif(!isProduction, uglify()))
+      // .pipe(uglify()) // Сжатие JavaScript кода
+      .pipe(concat("main.min.js"))
+      .pipe(dest("dist/js/"))
+      .pipe(
+        size({
+          gzip: true,
+          pretty: true,
+          showFiles: true,
+          showTotal: true,
+        })
+      )
+      .pipe(browserSync.reload({ stream: true }))
+  );
 }
 
 function styles() {
-  return src("app/scss/style.scss")
-    .pipe(
-      plumber({ errorHandler: notify.onError("Error: <%= error.message %>") })
-    )
-    .pipe(sourcemaps.init())
-    .pipe(
-      sass({
-        outputStyle: "expanded", // "compressed"
-      })
-    )
-    .pipe(
-      autoprefixer({
-        overrideBrowserslist: ["last 8 versions"],
-        cascade: true,
-        browsers: [
-          "Android >= 4",
-          "Chrome >= 20",
-          "Firefox >= 24",
-          "Explorer >= 11",
-          "iOS >= 6",
-          "Opera >= 12",
-          "Safari >= 6",
-        ],
-      })
-    ) // Добавляет вендорные префиксы
-    .pipe(gcmq()) //Группирует медиа
-    .pipe(
-      cleancss({
-        level: {
-          2: {
-            specialComments: 0,
-            // format: "beautify",
-          },
-        },
-      })
-    )
-    .pipe(concat("style.min.css"))
-    .pipe(sourcemaps.write("../maps"))
-    .pipe(dest("dist/css/"))
-    .pipe(
-      size({
-        gzip: true,
-        pretty: true,
-        showFiles: true,
-        showTotal: true,
-      })
-    )
-    .pipe(browserSync.reload({ stream: true }));
+  return (
+    src("app/scss/style.scss")
+      .pipe(
+        plumber({ errorHandler: notify.onError("Error: <%= error.message %>") })
+      )
+      .pipe(gulpif(!isProduction, sourcemaps.init()))
+      // .pipe(sourcemaps.init())
+      .pipe(
+        sass({
+          outputStyle: "expanded", // "compressed"
+        })
+      )
+      .pipe(
+        autoprefixer({
+          overrideBrowserslist: ["last 8 versions"],
+          cascade: true,
+          browsers: [
+            "Android >= 4",
+            "Chrome >= 20",
+            "Firefox >= 24",
+            "Explorer >= 11",
+            "iOS >= 6",
+            "Opera >= 12",
+            "Safari >= 6",
+          ],
+        })
+      ) // Добавляет вендорные префиксы
+      .pipe(gcmq()) //Группирует медиа
+      .pipe(gulpif(!isProduction, cleancss()))
+      // .pipe(
+      //   cleancss({
+      //     level: {
+      //       2: {
+      //         specialComments: 0,
+      //         // format: "beautify",
+      //       },
+      //     },
+      //   })
+      // )
+      .pipe(concat("style.min.css"))
+      .pipe(gulpif(!isProduction, sourcemaps.write("../maps")))
+      // .pipe(sourcemaps.write("../maps"))
+      .pipe(dest("dist/css/"))
+      .pipe(
+        size({
+          gzip: true,
+          pretty: true,
+          showFiles: true,
+          showTotal: true,
+        })
+      )
+      .pipe(browserSync.reload({ stream: true }))
+  );
 }
 
 function img() {
