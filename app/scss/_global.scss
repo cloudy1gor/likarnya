@@ -98,6 +98,16 @@ body {
   }
 }
 
+.svgarrow,
+.svglink {
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+.svglink {
+  background-position: left;
+}
+
 .swiper-container-horizontal > .swiper-pagination-bullets,
 .swiper-pagination-custom,
 .swiper-pagination-fraction {

@@ -148,7 +148,7 @@ function styles() {
 function img() {
   return src([
     "app/images/**/*.+(jpg|jpeg|png|gif|svg|ico)",
-    // "!app/images/svg/**/*.svg",
+    "!app/images/svg/**/*.svg",
   ])
     .pipe(changed("dist/images")) // не сжимать повторно
     .pipe(
@@ -252,10 +252,18 @@ function svg2sprite() {
     .pipe(
       svgsprite({
         mode: {
-          stack: {
+          // stack: {
+          //   sprite: "../sprite.svg",
+          // },
+          symbol: {
             sprite: "../sprite.svg",
           },
-          symbol: false,
+        },
+        shape: {
+          dimension: {
+            maxWidth: 50,
+            maxHeight: 50,
+          },
         },
       })
     )
