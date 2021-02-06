@@ -1,16 +1,29 @@
 .about {
   margin-bottom: 150px;
   padding-top: 210px;
+  @include mq("1024") {
+    margin-bottom: 90px;
+    padding-top: 150px;
+  }
 
   &__content {
     display: flex;
     margin-bottom: 150px;
+    @include mq("1024") {
+      flex-wrap: wrap-reverse;
+      justify-content: center;
+      margin-bottom: 60px;
+    }
   }
 
   &__text {
     margin-right: 30px;
     max-width: 468px;
     line-height: 19px;
+    @include mq("1024") {
+      margin: 30px;
+      max-width: 90%;
+    }
 
     p:not(:last-child) {
       margin-bottom: 25px;
@@ -19,6 +32,24 @@
 
   &__links {
     display: flex;
+    justify-content: center;
+    @include mq("1024") {
+      flex-wrap: wrap;
+    }
+  }
+
+  &__answers {
+    min-width: 470px;
+    @include mq("1024") {
+      flex-grow: 1;
+    }
+  }
+
+  &__medical {
+    flex-grow: 1;
+    @include mq("1024") {
+      margin-bottom: 25px;
+    }
   }
 
   &__medical,
@@ -27,7 +58,6 @@
     display: block;
     margin-right: 30px;
     padding: 180px 50px 60px;
-    min-width: 670px;
     min-height: 320px;
     transition: transform 0.5s, box-shadow 0.5s;
 
@@ -37,17 +67,16 @@
     }
   }
 
-  &__answers {
-    margin-right: 0;
-    min-width: 470px;
-  }
-
   &__info {
     display: block;
     margin-bottom: 12px;
     font-size: 36px;
     line-height: 43px;
     color: #fff;
+    @include mq("1024") {
+      font-size: 28px;
+      line-height: 30px;
+    }
     @extend %r500;
 
     &--black {

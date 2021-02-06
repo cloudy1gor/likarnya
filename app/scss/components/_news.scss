@@ -1,5 +1,8 @@
 .news {
   margin-bottom: 150px;
+  @include mq("1024") {
+    margin-bottom: 90px;
+  }
 
   &__top {
     display: flex;
@@ -25,5 +28,10 @@
     grid-gap: 30px;
     grid-template-columns: 1fr 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr;
+    @include mq("1024") {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
   }
 }

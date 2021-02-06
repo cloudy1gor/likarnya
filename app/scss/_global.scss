@@ -42,6 +42,10 @@ body {
   margin-bottom: 60px;
   font-size: 36px;
   line-height: 43px;
+  @include mq("1024") {
+    font-size: 28px;
+    line-height: 30px;
+  }
   @extend %r500;
 }
 
@@ -61,6 +65,8 @@ body {
 }
 
 .number {
+  margin: 15px;
+
   &__top {
     display: flex;
     margin-bottom: 7px;
@@ -84,6 +90,7 @@ body {
 
 .address {
   display: flex;
+  margin-bottom: 15px;
 
   &__location {
     margin-right: 10px;
@@ -117,10 +124,20 @@ body {
   display: block;
   width: 200px;
   max-height: 20px;
+  @include mq("1024") {
+    left: 50%;
+    right: 0;
+    top: unset;
+    bottom: 150px;
+    transform: translateX(-50%);
+  }
 }
 
 .swiper-pagination {
   transform: rotate(90deg);
+  @include mq("1024") {
+    transform: rotate(0);
+  }
 }
 
 .swiper-pagination-bullet {
@@ -140,16 +157,22 @@ body {
 
 .swiper-container {
   min-height: 345px !important;
+  @include mq("1024") {
+    min-height: auto !important;
+  }
 }
 
 .swiper-button-prev,
 .swiper-button-next {
   position: relative;
-  bottom: -50px;
+  bottom: -40px;
   z-index: 1;
   width: 85px;
   height: 41px;
   background-color: #fff;
+  @include mq("1024") {
+    bottom: -30px;
+  }
 }
 
 .swiper-button-next {
@@ -158,7 +181,11 @@ body {
 
 .swiper-button-prev {
   left: 41.5%;
-  bottom: -70px;
+  bottom: -60px;
+  @include mq("1024") {
+    left: 39%;
+    bottom: -50px;
+  }
 }
 
 .swiper-button-next.swiper-button-disabled,

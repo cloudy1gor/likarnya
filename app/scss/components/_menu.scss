@@ -8,6 +8,13 @@
     justify-content: space-between;
   }
 
+  &__btn {
+    display: none;
+    @include mq("768") {
+      display: block;
+    }
+  }
+
   &__img {
     width: 24px;
     height: 12px;
@@ -15,11 +22,15 @@
 
   &__list {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
   }
 
   &__item:not(:last-child) {
     margin-right: 30px;
+    @include mq("1024") {
+      margin-right: 20px;
+    }
   }
 
   &__link {
@@ -35,8 +46,25 @@
     }
   }
 
+  &__covid {
+    @include mq("1024") {
+      display: none;
+    }
+    // @include mq("768") {
+    //   display: block;
+    // }
+  }
+
   &__pic {
     width: 102px;
     height: 21px;
+  }
+
+  &.hide {
+    transform: translateX(-100%);
+  }
+  @include mq("768") {
+    position: relative;
+    transition: transform 0.6s;
   }
 }

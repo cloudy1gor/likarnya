@@ -18,9 +18,8 @@ window.addEventListener("DOMContentLoaded", () => {
       nextEl: ".swiper-button-next",
       prevEl: ".swiper-button-prev",
     },
-    slidesPerView: 2,
+    slidesPerView: 1,
     spaceBetween: 30,
-    lazy: true,
     autoplay: {
       delay: 5000,
       disableOnInteraction: false,

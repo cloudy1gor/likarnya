@@ -1,22 +1,34 @@
 .links {
-  margin-bottom: 150px;
+  margin-bottom: 130px;
+  @include mq("1024") {
+    margin-bottom: 90px;
+  }
 
   &__list {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
+    @include mq("1024") {
+      justify-content: center;
+    }
   }
 
   &__item {
     display: flex;
     flex-direction: column;
+    margin-bottom: 20px;
     border: 2px solid transparent;
     padding: 30px 50px;
+    width: 100%;
     min-height: 270px;
-    max-width: calc(25% - 30px);
+    max-width: 270px;
     background-color: #fff;
     transition: transform 0.6s, border-color 0.4s;
+    @include mq("1024") {
+      margin-right: 30px;
+      min-width: 40%;
+    }
 
     &:hover {
       border-color: $accent-color;
@@ -35,9 +47,8 @@
     display: block;
     flex: 1 1;
     margin-bottom: 27px;
-    min-height: 100%;
     font-size: 14px;
-    line-height: 19px;
+    line-height: 16px;
     text-align: center;
   }
 

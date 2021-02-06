@@ -1,8 +1,6 @@
 // Определение констант Gulp
 const { src, dest, parallel, series, watch } = require("gulp");
 
-const yargs = require("yargs").argv;
-const gulpif = require("gulp-if");
 const pug = require("gulp-pug");
 const browserSync = require("browser-sync").create();
 const concat = require("gulp-concat");
@@ -12,7 +10,7 @@ const notify = require("gulp-notify");
 const sourcemaps = require("gulp-sourcemaps");
 const uglify = require("gulp-uglify-es").default;
 const sass = require("gulp-sass");
-const fibers = require("fibers");
+const fibers = require("fibers"); // для лучшей компиляции scss
 const autoprefixer = require("gulp-autoprefixer");
 const cleancss = require("gulp-clean-css");
 const size = require("gulp-size");
@@ -31,10 +29,8 @@ const ttf2woff = require("gulp-ttf2woff");
 const ttf2eot = require("gulp-ttf2eot");
 
 // кастом
-const isProduction = yargs.env === "production" ? true : false;
 const images = parallel(img, svg2css, svg2sprite);
 const fonts = parallel(woff, woff2, eot);
-
 const jsFiles = ["node_modules/swiper/swiper-bundle.js", "app/js/main.js"];
 
 function browsersync() {
@@ -57,7 +53,7 @@ function html() {
     )
     .pipe(
       pug({
-        pretty: !isProduction, // Форматирование при сжатии(false)
+        pretty: true, // Форматирование при сжатии
       })
     )
     .pipe(
@@ -73,26 +69,23 @@ function html() {
 }
 
 function scripts() {
-  return (
-    src(jsFiles)
-      .pipe(
-        plumber({ errorHandler: notify.onError("Error: <%= error.message %>") })
-      )
-      .pipe(babel({ presets: ["@babel/env"] }))
-      .pipe(gulpif(!isProduction, uglify()))
-      // .pipe(uglify()) // Сжатие JavaScript кода
-      .pipe(concat("main.min.js"))
-      .pipe(dest("dist/js/"))
-      .pipe(
-        size({
-          gzip: true,
-          pretty: true,
-          showFiles: true,
-          showTotal: true,
-        })
-      )
-      .pipe(browserSync.reload({ stream: true }))
-  );
+  return src(jsFiles)
+    .pipe(
+      plumber({ errorHandler: notify.onError("Error: <%= error.message %>") })
+    )
+    .pipe(babel({ presets: ["@babel/env"] }))
+    .pipe(uglify()) // Сжатие JavaScript кода
+    .pipe(concat("main.min.js"))
+    .pipe(dest("dist/js/"))
+    .pipe(
+      size({
+        gzip: true,
+        pretty: true,
+        showFiles: true,
+        showTotal: true,
+      })
+    )
+    .pipe(browserSync.reload({ stream: true }));
 }
 
 function styles() {
@@ -100,7 +93,7 @@ function styles() {
     .pipe(
       plumber({ errorHandler: notify.onError("Error: <%= error.message %>") })
     )
-    .pipe(gulpif(!isProduction, sourcemaps.init()))
+    .pipe(sourcemaps.init())
     .pipe(sass({ outputStyle: "expanded" }, { fibers: fibers }))
     .pipe(
       autoprefixer({
@@ -119,20 +112,17 @@ function styles() {
     ) // Добавляет вендорные префиксы
     .pipe(gcmq()) //Группирует медиа
     .pipe(
-      gulpif(
-        !isProduction,
-        cleancss({
-          level: {
-            2: {
-              specialComments: 0,
-              // format: "beautify",
-            },
+      cleancss({
+        level: {
+          2: {
+            specialComments: 0,
+            // format: "beautify",
           },
-        })
-      )
+        },
+      })
     )
     .pipe(concat("style.min.css"))
-    .pipe(gulpif(!isProduction, sourcemaps.write(".")))
+    .pipe(sourcemaps.write("."))
     .pipe(dest("dist/css/"))
     .pipe(
       size({
@@ -233,7 +223,7 @@ function svg2css() {
 
 function svg2sprite() {
   return src("app/images/svg/icons/*.svg")
-    .pipe(changed("dist/images")) // не сжимать изображения повторно
+    .pipe(changed("dist/images")) // не сжимать повторно
     .pipe(
       plumber({ errorHandler: notify.onError("Error: <%= error.message %>") })
     )

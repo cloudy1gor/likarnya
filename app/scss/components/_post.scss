@@ -7,6 +7,15 @@
   max-height: 285px;
   background-color: #fff;
   transition: transform 0.5s, box-shadow 0.5s;
+  @include mq("1024") {
+    flex-direction: row;
+    min-width: 90%;
+  }
+  @include mq("768") {
+    flex-direction: column;
+    padding: 30px;
+    max-height: 600px;
+  }
 
   &__link {
     position: absolute;
@@ -19,18 +28,37 @@
 
   &__img-container {
     margin-bottom: 12px;
+    @include mq("1024") {
+      margin: 0 25px 0 0;
+    }
+    @include mq("768") {
+      display: flex;
+      justify-content: center;
+      margin: 0 0 15px;
+    }
   }
 
   &__img {
     max-width: 100%;
     object-fit: cover;
+    @include mq("1024") {
+      min-height: 100px;
+    }
+    @include mq("768") {
+      min-width: 100%;
+      min-height: 300px;
+    }
   }
 
   &__title {
-    @include txt(4);
+    @include txt(5);
     flex-grow: 1;
     margin-bottom: 16px;
     line-height: 19px;
+    @include mq("1024") {
+      display: flex;
+      align-items: center;
+    }
     @extend %r400;
   }
 
@@ -38,6 +66,9 @@
     @include txt(4);
     display: none;
     flex-grow: 1;
+    @include mq("768") {
+      @include txt(8);
+    }
   }
 
   &:hover {
@@ -54,6 +85,9 @@
 
     .post__img-container {
       margin-bottom: 22px;
+      @include mq("1024") {
+        margin: 0 auto 25px;
+      }
     }
 
     .post__title {
@@ -66,16 +100,24 @@
     .post__text {
       display: block;
     }
+    @include mq("1024") {
+      flex-direction: column;
+      min-width: 90%;
+    }
   }
 
   &__date {
     position: relative;
     padding-left: 18px;
+    @include mq("1024") {
+      margin-top: auto;
+      max-height: 1em;
+    }
 
     &::before {
       @include pseudo();
       left: 4px;
-      bottom: 6px;
+      bottom: 0;
       border-radius: 50%;
       width: 8px;
       height: 8px;

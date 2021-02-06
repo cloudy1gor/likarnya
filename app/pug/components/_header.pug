@@ -60,11 +60,10 @@ header.header
   nav.menu
     .container
       .menu__inner
+        a.menu__btn(href="#")
+          svg.menu__img
+            use(xlink:href="images/sprite.svg#menu")
         ul.menu__list
-          li.menu__item
-            a.menu__btn(href="#")
-              svg.menu__img
-                use(xlink:href="images/sprite.svg#menu")
           li.menu__item
             a.menu__link(href="#") Відділення
           li.menu__item
