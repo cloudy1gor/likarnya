@@ -62,7 +62,7 @@
                     <svg class="header__register-img header__register-img--check">
                       <use xlink:href="images/sprite.svg#checked"></use>
                     </svg>
-                  </div><span class="header__register-text header__register-text--check">Онлайн запис</span></a></div>
+                  </div><span class="header__register-text header__register-text--check" data-modal="data-modal">Онлайн запис</span></a></div>
             </div>
           </div>
         </div>
@@ -196,15 +196,6 @@
         </div>
       </header>
       <main class="main">
-        <div class="modal">
-          <div class="modal__inner">
-            <form class="modal__person" action="#">
-              <label class="modal__label" for="#">
-                <input class="modal__input" type="text"/>
-              </label>
-            </form>
-          </div>
-        </div>
         <section class="about"> 
           <div class="container">
             <div class="about__content">
@@ -452,6 +443,53 @@
           <div class="container"><span>© Вінницька медична лікарня №1</span></div>
         </div>
       </footer>
+      <button class="up">
+        <svg class="up__icon">
+          <use xlink:href="images/sprite.svg#up"></use>
+        </svg>
+      </button>
+      <div class="modal hide">
+        <div class="modal__dialog">
+          <div class="modal__content"><span class="modal__title">Форма реєстрації</span>
+            <div class="modal__inner">
+              <form class="modal__person" action="#">
+                <div class="modal__close" data-close="">&times;</div>
+                <label class="modal__label" for="#">
+                  <sapn class="modal__name">Ім'я</sapn>
+                  <input class="modal__input" type="text"/>
+                </label>
+                <label class="modal__label" for="#">
+                  <sapn class="modal__name">Прізвище</sapn>
+                  <input class="modal__input" type="text"/>
+                </label>
+                <label class="modal__label" for="#">
+                  <sapn class="modal__name">По батькові</sapn>
+                  <input class="modal__input" type="text"/>
+                </label>
+              </form>
+              <form class="modal__form" action="#">
+                <label class="modal__label" for="#"><span class="modal__name">Телефон</span>
+                  <input class="modal__input" type="tel" name="" placeholder="(093)-111-11-11"/>
+                </label>
+                <label class="modal__label" for="#"><span class="modal__name">Наявність направлення</span>
+                  <label class="modal__box" for="#">
+                    <input class="modal__checkbox" type="checkbox" name="radio"/><span class="modal__checked"></span><span class="modal__text">Так</span>
+                  </label>
+                </label>
+                <label class="modal__label" for="#"><span class="modal__name">Номер направлення</span>
+                  <input class="modal__input" type="text" name="text" placeholder="111-222-33-44"/>
+                </label>
+              </form>
+            </div>
+            <div class="modal__bottom">
+              <label class="modal__label modal__label--bottom" for="#">
+                <input class="modal__checkbox" type="checkbox"/><span class="modal__checked"></span><span class="modal__ok">Згоден(а) на обробку персональних даних</span>
+              </label>
+              <button class="modal__btn" type="submit">Онлайн запис</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     <script src="js/main.min.js"></script>
   </body>

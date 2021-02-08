@@ -23,6 +23,12 @@
 
   &__btn {
     display: none;
+    transition: transform 0.4s;
+    cursor: pointer;
+
+    &:hover {
+      transform: scale(1.15);
+    }
     @include mq("768") {
       position: relative;
       z-index: 4;

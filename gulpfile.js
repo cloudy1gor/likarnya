@@ -242,10 +242,7 @@ function svg2sprite() {
     .pipe(
       svgsprite({
         mode: {
-          // stack: {
-          //   sprite: "../sprite.svg",
-          // },
-          symbol: {
+          stack: {
             sprite: "../sprite.svg",
           },
         },

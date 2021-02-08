@@ -64,14 +64,8 @@ body {
   }
 }
 
-.overlay {
-  position: relative;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  z-index: 100;
-  background-color: rgba(0, 0, 0, 0.4);
+.hide {
+  display: none;
 }
 
 .number {
@@ -112,6 +106,36 @@ body {
       display: block;
       max-width: 350px;
     }
+  }
+}
+
+.up {
+  position: fixed;
+  right: 30px;
+  bottom: 30px;
+  z-index: 999;
+  width: 42px;
+  height: 42px;
+  transition: background-color 0.5s;
+  cursor: pointer;
+
+  &__icon {
+    border-radius: 50%;
+    max-width: 40px;
+    max-height: 40px;
+    fill: #000;
+    background-color: #e5f4f3;
+  }
+
+  &:hover {
+    background-color: $accent-color;
+  }
+
+  &.animated {
+    animation-name: "up";
+    animation-duration: 2s;
+    animation-timing-function: ease;
+    animation-iteration-count: infinite;
   }
 }
 
