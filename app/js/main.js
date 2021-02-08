@@ -59,4 +59,35 @@ window.addEventListener("DOMContentLoaded", () => {
       ratingActive.style.width = `${ratingActiveWidth}%`;
     }
   }
+
+  // кнопка меню
+  const btn = document.querySelector(".menu__btn");
+  const list = document.querySelector(".menu__list");
+
+  btn.addEventListener("click", () => {
+    list.classList.toggle("show");
+  });
+
+  // липкая шапка
+  const menu = document.querySelector(".menu");
+  const sticky = menu.offsetTop;
+
+  window.onscroll = function () {
+    scroll();
+  };
+
+  function scroll() {
+    if (window.pageYOffset > sticky) {
+      menu.classList.add("sticky");
+    } else {
+      menu.classList.remove("sticky");
+    }
+  }
+
+  // модальное окно
+  const modal = document.querySelector(".modal");
+
+  modal.setTimeout(() => {
+    modal.style.display = "block";
+  }, 5000);
 });

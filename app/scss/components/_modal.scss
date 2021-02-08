@@ -1,0 +1,8 @@
+.modal {
+  position: relative;
+  display: none;
+  left: 50%;
+  top: 20%;
+  z-index: 101;
+  transform: translateX(-50%);
+}

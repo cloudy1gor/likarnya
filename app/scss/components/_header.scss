@@ -44,6 +44,9 @@
 
   &__register {
     padding: 27px 0;
+    @include mq("768") {
+      display: none;
+    }
 
     &-inner {
       display: flex;

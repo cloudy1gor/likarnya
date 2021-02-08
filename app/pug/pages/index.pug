@@ -9,6 +9,49 @@ html(lang="ua")
     .wrapper
       include ../components/_header.pug
       main.main
+        .overlay
+        .modal
+          .modal__inner
+            form.modal__person(action="#")
+              label.modal__label(for="#")
+                sapn.modal__title Ім'я
+                input.modal__input(type="text")
+
+              label.modal__label(for="#")
+                sapn.modal__title Ім'я
+                input.modal__input(type="text")
+
+              label.modal__label(for="#")
+                sapn.modal__title Ім'я
+                input.modal__input(type="text")
+            
+            form.modal__form(action="#")
+              label.modal__label(for="#")
+                span.modal__title Телефон
+                input.modal__input(type="tel", name="(093)-111-11-11") 
+
+              label.modal__label(for="#")
+                span.modal__title Наявність направлення
+                label.modal__box(for="#")
+                  input.modal__check-item(type="radio", name="radio")
+                  span.modal__checked
+                  input.modal__check-item(type="radio", name="radio")
+                  span.modal__checked
+
+              label.modal__label(for="#")
+                span.modal__title Номер направлення
+                input(type="text", name="text") 1111-1111-1111-1111
+
+          .modal__bottom
+            label.modal__label(for="#")
+              input.modal__checkbox(type="radio")
+              span.modal__check
+              span.modal__ok Згоден(а) на обробку персональних даних
+
+            button.modal__btn(type="submit") Продовжити
+
+
+            
         section.about 
           .container
             .about__content

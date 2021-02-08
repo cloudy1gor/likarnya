@@ -1,6 +1,19 @@
 .menu {
   padding: 15px 0;
   background-color: $accent-color;
+  @include mq("768") {
+    padding: 6px 0;
+  }
+
+  &.sticky {
+    @include mq("768") {
+      position: fixed;
+      top: -2px;
+      z-index: 99;
+      margin: 0 -15px;
+      min-width: 100%;
+    }
+  }
 
   &__inner {
     display: flex;
@@ -11,6 +24,8 @@
   &__btn {
     display: none;
     @include mq("768") {
+      position: relative;
+      z-index: 4;
       display: block;
     }
   }
@@ -24,12 +39,39 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
+    transition: opacity 0.2s, transform 0.5s;
+
+    &.show {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    @include mq("768") {
+      position: absolute;
+      left: 0;
+      top: 38px;
+      z-index: 99;
+      flex-direction: column;
+      align-items: start;
+      margin-right: auto;
+      padding: 30px 30px 30px 50px;
+      min-height: 100%;
+      background-color: #fff;
+      opacity: 0;
+      transform: translateX(-100vh);
+    }
   }
 
-  &__item:not(:last-child) {
-    margin-right: 30px;
-    @include mq("1024") {
-      margin-right: 20px;
+  &__item {
+    position: relative;
+
+    &:not(:last-child) {
+      margin-right: 30px;
+      @include mq("1024") {
+        margin-right: 20px;
+      }
+      @include mq("768") {
+        margin: 0 0 25px;
+      }
     }
   }
 
@@ -44,24 +86,36 @@
     &:hover {
       color: $default-color;
     }
+    @include mq("768") {
+      color: $accent-color;
+    }
+  }
+
+  &__icon {
+    display: none;
+    @include mq("768") {
+      position: absolute;
+      left: -30px;
+      bottom: 0;
+      display: block;
+      max-width: 22px;
+      max-height: 22px;
+      background-color: #fff;
+    }
   }
 
   &__covid {
     @include mq("1024") {
       display: none;
     }
-    // @include mq("768") {
-    //   display: block;
-    // }
+    @include mq("768") {
+      display: block;
+    }
   }
 
   &__pic {
     width: 102px;
     height: 21px;
-  }
-
-  &.hide {
-    transform: translateX(-100%);
   }
   @include mq("768") {
     position: relative;

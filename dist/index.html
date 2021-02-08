@@ -68,17 +68,43 @@
         </div>
         <nav class="menu">
           <div class="container">
-            <div class="menu__inner"><a class="menu__btn" href="#">
+            <div class="menu__inner">
+              <button class="menu__btn" href="#">
                 <svg class="menu__img">
                   <use xlink:href="images/sprite.svg#menu"></use>
-                </svg></a>
+                </svg>
+              </button>
               <ul class="menu__list">
-                <li class="menu__item"><a class="menu__link" href="#">Відділення</a></li>
-                <li class="menu__item"><a class="menu__link" href="#">Поліклініка</a></li>
-                <li class="menu__item"><a class="menu__link" href="#">Платні послуги</a></li>
-                <li class="menu__item"><a class="menu__link" href="#">Відгуки і питання</a></li>
-                <li class="menu__item"><a class="menu__link" href="#">Новини</a></li>
-                <li class="menu__item"><a class="menu__link" href="#">Контакти</a></li>
+                <li class="menu__item"><a class="menu__link" href="#">Відділення</a>
+                  <svg class="menu__icon">
+                    <use xlink:href="images/sprite.svg#v"></use>
+                  </svg>
+                </li>
+                <li class="menu__item"><a class="menu__link" href="#">Поліклініка</a>
+                  <svg class="menu__icon">
+                    <use xlink:href="images/sprite.svg#h"></use>
+                  </svg>
+                </li>
+                <li class="menu__item"><a class="menu__link" href="#">Платні послуги</a>
+                  <svg class="menu__icon">
+                    <use xlink:href="images/sprite.svg#p"></use>
+                  </svg>
+                </li>
+                <li class="menu__item"><a class="menu__link" href="#">Відгуки і питання</a>
+                  <svg class="menu__icon">
+                    <use xlink:href="images/sprite.svg#c"></use>
+                  </svg>
+                </li>
+                <li class="menu__item"><a class="menu__link" href="#">Новини</a>
+                  <svg class="menu__icon">
+                    <use xlink:href="images/sprite.svg#n"></use>
+                  </svg>
+                </li>
+                <li class="menu__item"><a class="menu__link" href="#">Контакти</a>
+                  <svg class="menu__icon">
+                    <use xlink:href="images/sprite.svg#co"></use>
+                  </svg>
+                </li>
               </ul><a class="menu__covid" href="#">
                 <svg class="menu__pic">
                   <use xlink:href="images/sprite.svg#covid"></use>
@@ -170,6 +196,15 @@
         </div>
       </header>
       <main class="main">
+        <div class="modal">
+          <div class="modal__inner">
+            <form class="modal__person" action="#">
+              <label class="modal__label" for="#">
+                <input class="modal__input" type="text"/>
+              </label>
+            </form>
+          </div>
+        </div>
         <section class="about"> 
           <div class="container">
             <div class="about__content">
